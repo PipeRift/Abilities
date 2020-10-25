@@ -265,15 +265,15 @@ protected:
 	/** BEGIN Cooldowns */
 public:
 
+	// Used to manually start a cooldown from server
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = Ability)
+	void StartCooldown();
+
 	// Used to manually reset a cooldown from server
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = Ability)
 	void ResetCooldown();
 
 protected:
-
-	// Used to manually start a cooldown from server
-	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = Ability)
-	void StartCooldown();
 
 	virtual void OnCooldownStarted() {}
 	UFUNCTION(BlueprintImplementableEvent, Category = Ability, meta = (DisplayName = "On Cooldown Started"))

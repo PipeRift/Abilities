@@ -112,27 +112,28 @@ void UAbilitiesComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	DOREPLIFETIME(UAbilitiesComponent, AllAbilities);
 }
 
-void UAbilitiesComponent::EquipAbility(TSubclassOf<UAbility> Class)
+UAbility* UAbilitiesComponent::EquipAbility(TSubclassOf<UAbility> Class)
 {
 	if (!HasAuthority())
 	{
-		return;
+		return nullptr;
 	}
 
 	if (!Class)
 	{
 		UE_LOG(LogAbilities, Log, TEXT("No ability given to equip."));
-		return;
+		return nullptr;
 	}
 
 	if (EquippedAbilities.Contains(Class))
 	{
 		UE_LOG(LogAbilities, Log, TEXT("%s ability is already equipped."), *Class.Get()->GetName());
-		return;
+		return nullptr;
 	}
 
-	InternalEquipAbility(Class.Get());
+	UAbility* const Ability = InternalEquipAbility(Class.Get());
 	EquippedAbilities.Add(Class);
+	return Ability;
 }
 
 void UAbilitiesComponent::EquipAbilities(TSet<TSubclassOf<UAbility>> Classes)
@@ -227,6 +228,11 @@ bool UAbilitiesComponent::AddRemainingCooldowns(TArray<TSubclassOf<UAbility>> Cl
 	if(!HasAuthority())
 	{
 		return false;
+	}
+
+	if(FMath::IsNearlyZero(Duration))
+	{
+		return true;
 	}
 
 	TArray<UClass*> RawClasses;
@@ -438,7 +444,7 @@ void UAbilitiesComponent::MCAddRemainingCooldowns_Implementation(const TArray<UC
 	}
 }
 
-void UAbilitiesComponent::InternalEquipAbility(UClass* Class)
+UAbility* UAbilitiesComponent::InternalEquipAbility(UClass* Class)
 {
 	UAbility* Ability = NewObject<UAbility>(GetOuter(), Class);
 
@@ -446,6 +452,7 @@ void UAbilitiesComponent::InternalEquipAbility(UClass* Class)
 	AbilityToInstance.Add(Class, Ability);
 
 	Ability->DoBeginPlay(this);
+	return Ability;
 }
 
 void UAbilitiesComponent::AddTag(const FGameplayTag& NewTag)

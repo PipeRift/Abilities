@@ -57,15 +57,24 @@ float FAbilitiesCooldownCounter::GetRemaining(UClass* Ability) const
 
 bool FAbilitiesCooldownCounter::TrySetRemaining(UClass* Ability, float Duration)
 {
-	if (FTimerHandle* Handle = Handles.Find(Ability))
+	FTimerHandle* Handle = Handles.Find(Ability);
+	if (!Handle)
 	{
-		GetTimerManager()->SetTimer(*Handle, [this, Ability]()
-		{
-			OnReady(Ability);
-		}, Duration, false);
+		return false;
+	}
+
+	if(Duration <= 0.f)
+	{
+		GetTimerManager()->ClearTimer(*Handle);
+		OnReady(Ability);
 		return true;
 	}
-	return false;
+
+	GetTimerManager()->SetTimer(*Handle, [this, Ability]()
+	{
+		OnReady(Ability);
+	}, Duration, false);
+	return true;
 }
 
 FTimerManager* FAbilitiesCooldownCounter::GetTimerManager() const

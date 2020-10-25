@@ -173,7 +173,7 @@ protected:
 public:
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "AbilityComponent|Abilities")
-	void EquipAbility(TSubclassOf<UAbility> Class);
+	UAbility* EquipAbility(TSubclassOf<UAbility> Class);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "AbilityComponent|Abilities")
 	void EquipAbilities(TSet<TSubclassOf<UAbility>> Classes);
@@ -289,7 +289,7 @@ protected:
 
 private:
 
-	void InternalEquipAbility(UClass* Class);
+	UAbility* InternalEquipAbility(UClass* Class);
 
 public:
 
@@ -437,10 +437,10 @@ public:
 	/** Template API helpers */
 
 	template<typename T>
-	void EquipAbility()
+	T* EquipAbility()
 	{
 		static_assert(TIsDerivedFrom<T, UAbility>::IsDerived, "Must provide an ability class");
-		EquipAbility(T::StaticClass());
+		return Cast<T>(EquipAbility(T::StaticClass()));
 	}
 
 	template<typename T>
