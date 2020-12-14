@@ -15,6 +15,7 @@ public class Abilities : ModuleRules
 		{
 			"Core",
 			"CoreUObject",
+			"DeveloperSettings",
 			"Engine",
 			"GameplayTags"
 		});

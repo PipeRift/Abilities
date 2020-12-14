@@ -28,6 +28,9 @@ public:
 	{
 		bHasCast = false;
 		TickMode = EAbilityTickMode::DuringActivationOnly;
+
+		CooldownDuration = 0.1f;
+		CooldownMode = EAbilityCooldownMode::Manual;
 	}
 
 protected:

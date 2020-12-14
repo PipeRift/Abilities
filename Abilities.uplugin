@@ -8,7 +8,7 @@
 	"CreatedBy": "Miguel Fernandez Arce",
 	"DocsURL": "https://github.com/splash-damage/abilities",
 	"SupportURL": "miguel.fernandez@splashdamage.com",
-	"EngineVersion" : "4.25",
+	"EngineVersion" : "4.26",
 	"CanContainContent": false,
 	"IsBetaVersion": true,
 	"Modules": [
