@@ -33,7 +33,7 @@ class FAbilityTestSpec_Buffs : public FAbilityTestSpec
 		if (BuffAsset)
 		{
 			BuffAsset->RemoveFromRoot();
-			BuffAsset->MarkPendingKill();
+			BuffAsset->MarkAsGarbage();
 		}
 	}
 

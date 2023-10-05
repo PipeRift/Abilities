@@ -51,11 +51,11 @@ bool UBuffFactory::ConfigureProperties()
 	Options.Mode = EClassViewerMode::ClassPicker;
 
 	FAssetClassParentFilter;
-	TSharedPtr<FAssetClassParentFilter> Filter = MakeShareable(new FAssetClassParentFilter);
-	Options.ClassFilter = Filter;
-
+	TSharedRef<FAssetClassParentFilter> Filter = MakeShareable(new FAssetClassParentFilter);
 	Filter->DisallowedClassFlags = CLASS_Abstract | CLASS_Deprecated | CLASS_NewerVersionExists;
 	Filter->AllowedChildrenOfClasses.Add(UBuff::StaticClass());
+	Options.ClassFilters.Add(Filter);
+
 
 	const FText TitleText = LOCTEXT("CreateBuffOptions", "Pick Buff Class");
 	UClass* ChosenClass = nullptr;
