@@ -8,10 +8,8 @@ public class Abilities : ModuleRules
 	{
 		// Enable support for Include-What-You-Use
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		bEnforceIWYU = true;
-        bLegacyPublicIncludePaths = false;
 
-        PublicDependencyModuleNames.AddRange(new string[]
+		PublicDependencyModuleNames.AddRange(new string[]
 		{
 			"Core",
 			"CoreUObject",
@@ -19,7 +17,5 @@ public class Abilities : ModuleRules
 			"Engine",
 			"GameplayTags"
 		});
-
-		PrivateDependencyModuleNames.AddRange(new string[] {});
 	}
 }

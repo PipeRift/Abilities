@@ -10,18 +10,19 @@ namespace UnrealBuildTool.Rules
 		public AbilitiesTest(ReadOnlyTargetRules Target) : base(Target)
 		{
 			PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-			bEnforceIWYU = true;
-            bLegacyPublicIncludePaths = false;
 
-            PublicDependencyModuleNames.AddRange(new string[]
+			PublicDependencyModuleNames.AddRange(new string[]
 			{
-				"Core",
-				"Engine",
+				"Core"
+			});
+
+			PrivateDependencyModuleNames.AddRange(new string[]
+			{
+				"Abilities",
 				"CoreUObject",
-                "EngineSettings",
-                "Automatron",
-                "Abilities"
-            });
+				"Engine",
+				"EngineSettings"
+			});
 
 			if (Target.bBuildEditor)
 			{

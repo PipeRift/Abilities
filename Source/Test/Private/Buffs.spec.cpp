@@ -1,26 +1,20 @@
 // Copyright 2020 Splash Damage, Ltd. - All Rights Reserved.
-
-#include <CoreMinimal.h>
-
-#include "Helpers/TestHelpers.h"
+#include "Automatron.h"
+#include "Helpers/AbilityTestActor.h"
 #include "Helpers/TestBuff.h"
 
-
-#if WITH_DEV_AUTOMATION_TESTS
 
 /************************************************************************/
 /* BUFFS                                                                */
 /************************************************************************/
 
-class FAbilityTestSpec_Buffs : public FAbilityTestSpec
+class FAbilitySpec_Buffs : public Automatron::FTestSpec
 {
-	GENERATE_SPEC(FAbilityTestSpec_Buffs, "Abilities.Buff",
-		EAutomationTestFlags::ProductFilter |
-		EAutomationTestFlags::EditorContext |
-		EAutomationTestFlags::ServerContext
-	);
+	GENERATE_SPEC(FAbilitySpec_Buffs, "Abilities.Buff",
+		EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask);
 
-	template<typename T>
+public:
+	template <typename T>
 	T* LoadBuffMock()
 	{
 		T* Buff = NewObject<T>();
@@ -37,26 +31,22 @@ class FAbilityTestSpec_Buffs : public FAbilityTestSpec
 		}
 	}
 
-	UAbilitiesComponent* Component = nullptr;
+	TObjectPtr<UAbilitiesComponent> Component;
 };
 
-void FAbilityTestSpec_Buffs::Define()
+void FAbilitySpec_Buffs::Define()
 {
-	BeforeEach([this]()
-	{
-		CreateWorld();
-		Component = AddTestComponent();
+	BeforeEach([this]() {
+		Component = GetWorld()->SpawnActor<AAbilityTestActor>()->Abilities;
 	});
 
-	It("Checks if there's no buff", [this]()
-	{
+	It("Checks if there's no buff", [this]() {
 		UTestBuff* Buff = LoadBuffMock<UTestBuff>();
 		TestFalse("Has Buff", Component->HasBuff(Buff));
 		UnloadBuffMock(Buff);
 	});
 
-	It("Can apply", [this]()
-	{
+	It("Can apply", [this]() {
 		UTestBuff* Buff = LoadBuffMock<UTestBuff>();
 
 		const bool bApplied = Component->ApplyBuff(Buff);
@@ -66,8 +56,7 @@ void FAbilityTestSpec_Buffs::Define()
 		UnloadBuffMock(Buff);
 	});
 
-	It("Cant apply twice", [this]()
-	{
+	It("Cant apply twice", [this]() {
 		UTestBuff* Buff = LoadBuffMock<UTestBuff>();
 
 		TestTrue("Added", Component->ApplyBuff(Buff));
@@ -78,8 +67,7 @@ void FAbilityTestSpec_Buffs::Define()
 		UnloadBuffMock(Buff);
 	});
 
-	It("Can remove", [this]()
-	{
+	It("Can remove", [this]() {
 		UTestBuff* Buff = LoadBuffMock<UTestBuff>();
 
 		TestFalse("Removed before apply", Component->RemoveBuff(Buff));
@@ -93,8 +81,7 @@ void FAbilityTestSpec_Buffs::Define()
 		UnloadBuffMock(Buff);
 	});
 
-	It("Cant remove twice", [this]()
-	{
+	It("Cant remove twice", [this]() {
 		UTestBuff* Buff = LoadBuffMock<UTestBuff>();
 
 		Component->ApplyBuff(Buff);
@@ -107,8 +94,7 @@ void FAbilityTestSpec_Buffs::Define()
 		UnloadBuffMock(Buff);
 	});
 
-	It("Can remove two buffs", [this]()
-	{
+	It("Can remove two buffs", [this]() {
 		UTestBuff* Buff1 = LoadBuffMock<UTestBuff>();
 		UTestBuff* Buff2 = LoadBuffMock<UTestBuff>();
 
@@ -122,8 +108,7 @@ void FAbilityTestSpec_Buffs::Define()
 		UnloadBuffMock(Buff2);
 	});
 
-	It("Can Apply changes", [this]()
-	{
+	It("Can Apply changes", [this]() {
 		UTestBuff* Buff = LoadBuffMock<UTestBuff>();
 
 		TestFalse("Applied changes before Add", Buff->bChangesApplied);
@@ -134,8 +119,7 @@ void FAbilityTestSpec_Buffs::Define()
 		UnloadBuffMock(Buff);
 	});
 
-	It("Can Revert changes", [this]()
-	{
+	It("Can Revert changes", [this]() {
 		UTestBuff* Buff = LoadBuffMock<UTestBuff>();
 
 		TestTrue("Added", Component->ApplyBuff(Buff));
@@ -147,10 +131,8 @@ void FAbilityTestSpec_Buffs::Define()
 		UnloadBuffMock(Buff);
 	});
 
-	Describe("Unique", [this]()
-	{
-		It("Can apply two of the same type if not unique", [this]()
-		{
+	Describe("Unique", [this]() {
+		It("Can apply two of the same type if not unique", [this]() {
 			UTestBuff* Buff1 = LoadBuffMock<UTestBuff>();
 			UTestBuff* Buff2 = LoadBuffMock<UTestBuff>();
 
@@ -164,8 +146,7 @@ void FAbilityTestSpec_Buffs::Define()
 			UnloadBuffMock(Buff2);
 		});
 
-		It("Wont apply another if unique", [this]()
-		{
+		It("Wont apply another if unique", [this]() {
 			UTestBuff_Unique* Buff1 = LoadBuffMock<UTestBuff_Unique>();
 			UTestBuff_Unique* Buff2 = LoadBuffMock<UTestBuff_Unique>();
 
@@ -176,8 +157,7 @@ void FAbilityTestSpec_Buffs::Define()
 			UnloadBuffMock(Buff2);
 		});
 
-		It("Will apply and replace another unique", [this]()
-		{
+		It("Will apply and replace another unique", [this]() {
 			UTestBuff_UniqueReplace* Buff1 = LoadBuffMock<UTestBuff_UniqueReplace>();
 			UTestBuff_UniqueReplace* Buff2 = LoadBuffMock<UTestBuff_UniqueReplace>();
 
@@ -192,10 +172,8 @@ void FAbilityTestSpec_Buffs::Define()
 		});
 	});
 
-	Describe("Stackable", [this]()
-	{
-		It("Can apply one", [this]()
-		{
+	Describe("Stackable", [this]() {
+		It("Can apply one", [this]() {
 			auto* Buff = LoadBuffMock<UTestBuff_Stackable>();
 
 			TestTrue("Applied a buff", Component->ApplyBuff(Buff));
@@ -205,8 +183,7 @@ void FAbilityTestSpec_Buffs::Define()
 			UnloadBuffMock(Buff);
 		});
 
-		It("Can apply two", [this]()
-		{
+		It("Can apply two", [this]() {
 			auto* Buff = LoadBuffMock<UTestBuff_Stackable>();
 
 			TestTrue("Applied a buff once", Component->ApplyBuff(Buff));
@@ -218,8 +195,7 @@ void FAbilityTestSpec_Buffs::Define()
 			UnloadBuffMock(Buff);
 		});
 
-		It("Can remove one", [this]()
-		{
+		It("Can remove one", [this]() {
 			auto* Buff = LoadBuffMock<UTestBuff_Stackable>();
 
 			TestTrue("Applied a buff", Component->ApplyBuff(Buff));
@@ -232,8 +208,7 @@ void FAbilityTestSpec_Buffs::Define()
 			UnloadBuffMock(Buff);
 		});
 
-		It("Can remove two", [this]()
-		{
+		It("Can remove two", [this]() {
 			auto* Buff = LoadBuffMock<UTestBuff_Stackable>();
 
 			TestTrue("Applied a buff once", Component->ApplyBuff(Buff));
@@ -254,11 +229,7 @@ void FAbilityTestSpec_Buffs::Define()
 		});
 	});
 
-	AfterEach([this]()
-	{
-		RemoveTestComponent(Component);
-		ShutdownWorld();
+	AfterEach([this]() {
+		Component->GetOwner()->Destroy();
 	});
 }
-
-#endif //WITH_DEV_AUTOMATION_TESTS

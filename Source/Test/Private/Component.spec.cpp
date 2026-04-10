@@ -1,79 +1,67 @@
 // Copyright 2020 Splash Damage, Ltd. - All Rights Reserved.
 
-#include <CoreMinimal.h>
-
-#include "Helpers/TestHelpers.h"
+#include "Automatron.h"
+#include "Helpers/AbilityTestActor.h"
 #include "Helpers/TestAbility.h"
 
-
-#if WITH_DEV_AUTOMATION_TESTS
 
 /************************************************************************/
 /* COMPONENT SPEC                                                       */
 /************************************************************************/
 
-class FAbilityTestSpec_Component : public FAbilityTestSpec
+class FAbilitySpec_Component : public Automatron::FTestSpec
 {
-	GENERATE_SPEC(FAbilityTestSpec_Component, "Abilities.Component",
-		EAutomationTestFlags::ProductFilter |
-		EAutomationTestFlags::EditorContext |
-		EAutomationTestFlags::ServerContext
-	);
+	GENERATE_SPEC(FAbilitySpec_Component, "Abilities.Component",
+		EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask);
 
-	UAbilitiesComponent* Component = nullptr;
-	UTestAbility* Ability = nullptr;
+	TObjectPtr<UAbilitiesComponent> Component;
+	TObjectPtr<UTestAbility> Ability;
 };
 
-void FAbilityTestSpec_Component::Define()
+void FAbilitySpec_Component::Define()
 {
-	It("Can be created", [this]()
-	{
-		AAbilityTestActor* TestActor = AddTestActor();
+	It("Can be created", [this]() {
+		auto* Actor = GetWorld()->SpawnActor<AAbilityTestActor>();
 
-		TestNotNull(TEXT("Abilities Component"), TestActor->Abilities);
+		TestNotNull(TEXT("Actor"), Actor);
+		TestNotNull(TEXT("Abilities Component"), Actor->Abilities);
 
-		TestActor->Destroy();
+		Actor->Destroy();
 	});
 
-	Describe("Cooldowns", [this]()
-	{
-		BeforeEach([this]()
-		{
-			Component = AddTestComponent();
+	Describe("Cooldowns", [this]() {
+		BeforeEach([this]() {
+			Component = GetWorld()->SpawnActor<AAbilityTestActor>()->Abilities;
 			Ability = Component->EquipAbility<UTestAbility>();
 		});
 
-		It("Can start cooldown", [this]()
-		{
+		It("Can start cooldown", [this]() {
 			Ability->StartCooldown();
 			TestTrue("Is cooling down", Ability->IsCoolingDown());
 		});
 
-		It("Can end cooldown", [this]()
-		{
+		It("Can end cooldown", [this]() {
 			TestNotImplemented();
 		});
 
-		It("Can add cooldown", [this]()
-		{
+		It("Can add cooldown", [this]() {
 			TestNotImplemented();
 		});
 
-		It("Can substract cooldown", [this]()
-		{
+		It("Can substract cooldown", [this]() {
 			TestNotImplemented();
 		});
 
-		It("Will finish cooldown when subtract leaves it at 0 seconds", [this]()
-		{
+		It("Will finish cooldown when subtract leaves it at 0 seconds", [this]() {
 			TestNotImplemented();
 		});
 
-		It("Can't add cooldown if not cooling down", [this]()
-		{
+		It("Can't add cooldown if not cooling down", [this]() {
 			TestNotImplemented();
+		});
+
+		AfterEach([this]() {
+			Component->GetOwner()->Destroy();
 		});
 	});
 }
-
-#endif //WITH_DEV_AUTOMATION_TESTS

@@ -10,10 +10,8 @@ namespace UnrealBuildTool.Rules
 		public AbilitiesEditor(ReadOnlyTargetRules Target) : base(Target)
 		{
 			PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-			bEnforceIWYU = true;
-            bLegacyPublicIncludePaths = false;
 
-            PublicDependencyModuleNames.AddRange( new string[]
+			PublicDependencyModuleNames.AddRange(new string[]
 			{
 				"Core",
 				"Engine",
@@ -21,7 +19,7 @@ namespace UnrealBuildTool.Rules
 				"Abilities"
 			});
 
-			PrivateDependencyModuleNames.AddRange( new string[]
+			PrivateDependencyModuleNames.AddRange(new string[]
 			{
 				"AssetTools",
 				"Projects",

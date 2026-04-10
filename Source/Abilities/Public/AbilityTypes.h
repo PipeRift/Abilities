@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
-
 #include "AbilityTypes.generated.h"
 
 
@@ -12,10 +10,10 @@ enum class EAbilityState : uint8
 {
 	None UMETA(Hidden),
 	BeforeBeginPlay UMETA(Hidden),
-	JustEquipped, // After begin play the ability will be "JustEquipped"
-	Cancelled, // If the ability canceled last time it executed
-	Succeeded,  // If the ability finished successfully last time it executed
-	Cast, // State in which the player will drag a curve or wait for some time
+	JustEquipped,	 // After begin play the ability will be "JustEquipped"
+	Cancelled,		 // If the ability canceled last time it executed
+	Succeeded,		 // If the ability finished successfully last time it executed
+	Cast,			 // State in which the player will drag a curve or wait for some time
 	Activation,
 	AfterEndPlay UMETA(Hidden)
 };
@@ -24,8 +22,8 @@ enum class EAbilityState : uint8
 UENUM(Blueprintable, meta = (BitFlags, UseEnumValuesAsMaskValuesInEditor = "true"))
 enum class EAbilityTransitionFlag : uint8
 {
-	None             = 0,
-	StartCooldown    = 1 << 0,
+	None = 0,
+	StartCooldown = 1 << 0,
 	PredictionFailed = 1 << 1 UMETA(Hidden)
 };
 ENUM_CLASS_FLAGS(EAbilityTransitionFlag);
@@ -42,7 +40,8 @@ struct FAbilityStateTransition
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Transition)
 	EAbilityState Destination = EAbilityState::None;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Transition, meta = (Bitmask, BitmaskEnum = EAbilityTransitionFlag))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Transition,
+		meta = (Bitmask, BitmaskEnum = "/Script/Abilities.EAbilityTransitionFlag"))
 	EAbilityTransitionFlag Flags;
 
 
@@ -67,10 +66,13 @@ struct FAbilityStateTransition
 	}
 };
 
-template<>
+template <>
 struct TStructOpsTypeTraits<FAbilityStateTransition> : TStructOpsTypeTraitsBase2<FAbilityStateTransition>
 {
-	enum { WithNetSerializer = true };
+	enum
+	{
+		WithNetSerializer = true
+	};
 };
 
 inline void FAbilityStateTransition::Swap()

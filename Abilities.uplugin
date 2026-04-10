@@ -18,13 +18,10 @@
 			"LoadingPhase": "PreDefault",
 			"WhitelistPlatforms": [
 				"Win64",
-				"Win32",
 				"Linux",
+				"Mac",
 				"Android",
-				"PS5",
-				"XboxOne",
-				"Switch",
-				"Mac"
+				"IOS"
 			]
 		},
 		{
@@ -33,12 +30,7 @@
 			"LoadingPhase": "PostEngineInit",
 			"WhitelistPlatforms": [
 				"Win64",
-				"Win32",
 				"Linux",
-				"Android",
-				"PS5",
-				"XboxOne",
-				"Switch",
 				"Mac"
 			]
 		},
@@ -46,12 +38,6 @@
 			"Name": "AbilitiesTest",
 			"Type": "DeveloperTool",
 			"LoadingPhase": "Default"
-		}
-	],
-	"Plugins": [
-		{
-			"Name": "Automatron",
-			"Enabled": true
 		}
 	]
 }
