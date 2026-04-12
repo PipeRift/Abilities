@@ -1,0 +1,9 @@
+{
+	"BuildId": "47537391",
+	"Modules": 
+	{
+		"Abilities": "UnrealEditor-Abilities.dll",
+		"AbilitiesEditor": "UnrealEditor-AbilitiesEditor.dll",
+		"AbilitiesTest": "UnrealEditor-AbilitiesTest.dll"
+	}
+}

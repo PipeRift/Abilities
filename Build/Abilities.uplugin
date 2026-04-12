@@ -1,0 +1,46 @@
+{
+	"FileVersion": 3,
+	"Version": 4,
+	"VersionName": "1.1",
+	"FriendlyName": "Abilities",
+	"Description": "Provides a simple, flexible and extensible abilities system for UE4",
+	"Category": "Splash Damage",
+	"CreatedBy": "Miguel Fernandez Arce",
+	"CreatedByURL": "",
+	"DocsURL": "https://github.com/splash-damage/abilities",
+	"MarketplaceURL": "",
+	"SupportURL": "miguel.fernandez@splashdamage.com",
+	"EngineVersion": "5.7.0",
+	"CanContainContent": false,
+	"IsBetaVersion": true,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "Abilities",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault",
+			"PlatformAllowList": [
+				"Win64",
+				"Linux",
+				"Mac",
+				"Android",
+				"IOS"
+			]
+		},
+		{
+			"Name": "AbilitiesEditor",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit",
+			"PlatformAllowList": [
+				"Win64",
+				"Linux",
+				"Mac"
+			]
+		},
+		{
+			"Name": "AbilitiesTest",
+			"Type": "DeveloperTool",
+			"LoadingPhase": "Default"
+		}
+	]
+}

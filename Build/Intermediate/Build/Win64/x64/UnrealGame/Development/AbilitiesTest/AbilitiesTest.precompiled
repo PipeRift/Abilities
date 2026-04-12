@@ -1,0 +1,10 @@
+{
+	"OutputFiles": [
+		"Module.AbilitiesTest.gen.cpp.obj",
+		"Abilities.spec.cpp.obj",
+		"AbilitiesTestModule.cpp.obj",
+		"Buffs.spec.cpp.obj",
+		"Component.spec.cpp.obj",
+		"StructContainer.spec.cpp.obj"
+	]
+}

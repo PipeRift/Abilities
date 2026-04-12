@@ -1,0 +1,16 @@
+{
+	"OutputFiles": [
+		"Module.Abilities.gen.1.cpp.obj",
+		"Module.Abilities.gen.2.cpp.obj",
+		"AbilitiesComponent.cpp.obj",
+		"AbilitiesCooldownCounter.cpp.obj",
+		"AbilitiesModule.cpp.obj",
+		"Ability.cpp.obj",
+		"AbilityBase.cpp.obj",
+		"AbilityTypes.cpp.obj",
+		"Buff.cpp.obj",
+		"BuffsLifetimeCounter.cpp.obj",
+		"Serialization.cpp.obj",
+		"StructContainer.cpp.obj"
+	]
+}
